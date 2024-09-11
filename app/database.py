@@ -57,6 +57,8 @@ def get_all_currency():
         
     return symbols_ob
 
+
+
 def get_all_impulses():
     connection = postgreSQL_pool.getconn()
     cursor = connection.cursor()

@@ -92,11 +92,10 @@
                 {% for symbol, data in for_templates.items() %} 
                 <tr>  
                     <td>{{ symbol }}</td>  
-                    <td>
-                        {% if data['60'][0] == 'График' %}
+                    <td class="{% if data['5'][3] == 'S' %} bg-success {% elif data['5'][3] == 'L' %} bg-danger {% endif %};">
+                        {% if data['5'][0] == 'График' %}
                             <button 
-                                onclick="location.href='{{ url_for('get_coin_info', symbol=symbol, tf=60) }}';" 
-                                style="background-color: {% if data['60'][3] == 'S' %} green {% elif data['60'][3] == 'L' %} red {% endif %};">
+                                onclick="location.href='{{ url_for('get_coin_info', symbol=symbol, tf=60) }}';" >
                                 Click me
                             </button>
                         {% endif %}
