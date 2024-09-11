@@ -1,0 +1,134 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <link 
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" 
+      rel="stylesheet" 
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" 
+      crossorigin="anonymous" 
+    /> 
+    <title>Название вкладки</title>  
+    <style>
+        .table-container { 
+            padding: 0.5cm; /* Отступы вокруг таблицы */ 
+        }
+        table {  
+            width: 100%;  
+            border-collapse: collapse;
+        }  
+        th, td {  
+            padding: 8px;  
+            text-align: left;  
+            border: 1px solid #ddd;  
+        }  
+        th {  
+            background-color: #f2f2f2;  
+        }
+        .active-link {  
+            color: blue;  
+        }  
+        .nav-link {  
+            font-size: 2rem; /* Размер текста */  
+            color: rgb(224, 224, 224); 
+            transition: color 0.3s; /* Плавный переход цвета */ 
+        } 
+        .nav-link:hover {  
+            color: blue; /* Цвет при наведении */ 
+        }  
+    </style>  
+    <script> 
+        function highlightLink(event) { 
+            event.target.classList.toggle('active-link'); 
+        } 
+    </script>
+</head>  
+<body style="--tw-bg-opacity: 1; background-color: rgb(20 20 20 / var(--tw-bg-opacity));color:rgb(224, 224, 224);"> 
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">   
+        <div class="container-fluid">   
+            <div class="collapse navbar-collapse" id="navbarNav">   
+                <ul class="navbar-nav mx-auto">   
+                    <li class="nav-item">   
+                        <a class="nav-link" href="{{ url_for('impulses') }}" onclick="highlightLink(event)"><h1>Impulses</h1></a>   
+                    </li>   
+                    <li class="nav-item">   
+                        <a class="nav-link" href="{{ url_for('positions') }}" onclick="highlightLink(event)"><h1>Positions</h1></a>   
+                    </li>   
+                </ul>   
+            </div>   
+        </div>   
+    </nav>
+    
+    <div class="table-container">  
+        <h1 class="text-center">Данные по импульсам</h1>  
+        <table class="table table-dark table-bordered"> 
+            <thead> 
+                <tr>  
+                    <th style="width:10%">Symbol</th>  
+                    <th colspan="3">5 min</th>  
+                    <th colspan="3">15 min</th>  
+                    <th colspan="3">30 min</th>  
+                    <th colspan="3">60 min</th>  
+                </tr>  
+                <tr>  
+                    <th></th>  
+                    <th>Have Impulse</th>  
+                    <th>Have Levels</th>  
+                    <th>Have Order</th>  
+                    <th>Have Impulse</th>  
+                    <th>Have Levels</th>  
+                    <th>Have Order</th>  
+                    <th>Have Impulse</th>  
+                    <th>Have Levels</th>  
+                    <th>Have Order</th>  
+                    <th>Have Impulse</th>  
+                    <th>Have Levels</th>  
+                    <th>Have Order</th>  
+                </tr>  
+            </thead>  
+            <tbody>  
+                {% for symbol, data in for_templates.items() %} 
+                <tr>  
+                    <td>{{ symbol }}</td>  
+                    <td>
+                        {% if data['60'][0] == 'График' %}
+                            <button 
+                                onclick="location.href='{{ url_for('get_coin_info', symbol=symbol, tf=60) }}';" 
+                                style="background-color: {% if data['60'][3] == 'S' %} green {% elif data['60'][3] == 'L' %} red {% endif %};">
+                                Click me
+                            </button>
+                        {% endif %}
+                    </td>   
+                    <td> {{ data['5'][1] }} </td>  
+                    <td> {{ data['5'][2] }} </td> 
+                    <td>{% if data['15'][0] == 'График' %}  
+                        <button onclick="location.href='{{ url_for('get_coin_info', symbol=symbol, tf=15) }}';">Click me</button> 
+                    {% endif %}</td>   
+                    <td> {{ data['15'][1] }} </td>  
+                    <td> {{ data['15'][2] }} </td> 
+                    <td>{% if data['30'][0] == 'График' %}  
+                        <button onclick="location.href='{{ url_for('get_coin_info', symbol=symbol, tf=30) }}';">Click me</button> 
+                    {% endif %}</td>   
+                    <td> {{ data['30'][1] }} </td>  
+                    <td> {{ data['30'][2] }} </td>  
+                    
+                    <td>
+                        {% if data['60'][0] == 'График' %}
+                            <button 
+                                onclick="location.href='{{ url_for('get_coin_info', symbol=symbol, tf=60) }}';" 
+                                style="background-color: {% if data['60'][3] == 'S' %} green {% elif data['60'][3] == 'L' %} red {% endif %};">
+                                Click me
+                            </button>
+                        {% endif %}
+                    </td>
+                    <td> {{ data['60'][1] }} </td>  
+                    <td> {{ data['60'][2] }} </td> 
+                </tr> 
+                {% endfor %}  
+            </tbody>  
+        </table>  
+    </div>  
+</body>  
+</html>

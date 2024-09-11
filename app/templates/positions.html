@@ -1,0 +1,51 @@
+<!DOCTYPE html>   
+<html lang="en">   
+<head>   
+    <meta charset="UTF-8">   
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">   
+    <link  
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"  
+      rel="stylesheet"  
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"  
+      crossorigin="anonymous"  
+    />  
+    <title>Positions Page</title>   
+    <style>  
+        .active-link {  
+            color: blue;  
+        }  
+        .nav-link {  
+            font-size: 2rem; /* Размер текста */  
+            color: rgb(224, 224, 224); 
+            transition: color 0.3s; /* Плавный переход цвета */ 
+        } 
+        .nav-link:hover {  
+            color: blue; /* Цвет при наведении */ 
+        }  
+    </style>  
+    <script> 
+        function highlightLink(event) { 
+            event.target.classList.toggle('active-link'); 
+        } 
+    </script>
+</head>   
+<body style="--tw-bg-opacity: 1; background-color: rgb(20 20 20 / var(--tw-bg-opacity));color:rgb(224, 224, 224);">  
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">   
+        <div class="container-fluid">   
+            <div class="collapse navbar-collapse" id="navbarNav">   
+                <ul class="navbar-nav mx-auto">   
+                    <li class="nav-item">   
+                        <a class="nav-link" href="{{ url_for('impulses') }}" onclick="highlightLink(event)"><h1>Impulses</h1></a>   
+                    </li>   
+                    <li class="nav-item">   
+                        <a class="nav-link" href="{{ url_for('positions') }}" onclick="highlightLink(event)"><h1>Positions</h1></a>   
+                    </li>   
+                </ul>   
+            </div>   
+        </div>   
+    </nav>  
+    <div>    
+        <h1 class="text-center">Positions Page</h1>    
+        <p class="text-center">This page is currently empty.</p>  
+    </div>
