@@ -1,17 +1,17 @@
-# version: '3.8'
-# services:
-#   redis:
-#     image: redis:7.4
-#     container_name: cash
+version: '3.8'
+services:
+  redis:
+    image: redis:7.4
+    container_name: cash
 
 
-#   screener:
-#     image: screener_image
-#     build:
-#       context: .
-#     container_name: screener_app
-#     depends_on:
-#       - redis
-#     command: gunicorn -k uvicorn.workers.UvicornWorker app.main:app --bind 0.0.0.0:8000
-#     ports: 
-#       - 7777:8000
+  screener:
+    image: screener_image
+    build:
+      context: .
+    container_name: screener_app
+    depends_on:
+      - redis
+    command: gunicorn -k uvicorn.workers.UvicornWorker app.main:app --bind 0.0.0.0:8000
+    ports: 
+      - 7777:8000
