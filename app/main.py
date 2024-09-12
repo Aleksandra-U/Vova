@@ -12,7 +12,7 @@ from contextlib import asynccontextmanager
 
 # from app.screener.router import router as router_screener
 
-from app.pages.router import router as router_impulses
+from app.screener.router import router as router_impulses
 
 
 

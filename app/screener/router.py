@@ -1,57 +1,82 @@
-# from fastapi import APIRouter, Depends
-# from sqlalchemy.ext.asyncio import AsyncSession
-# from sqlalchemy import select
-# # from app.databaseNO import get_async_session
-# # from app.screener.models import Levels, Impulse, Orders
-# from app.database import get_all_levels
+from fastapi import APIRouter, Request, Depends
 
-# router = APIRouter(
-#     prefix='/screener',
-#     tags=['Screener'],
-# )
+from app.database import main_func, get_all_currency
+from app.charts import get_currency_chart_with_impulse
 
+from fastapi_cache.decorator import cache
+import time
 
+from fastapi.templating import Jinja2Templates
 
-# @router.get("") 
-# async def get_levels(): 
-#     levels = get_all_levels()
-#     return levels  # Возвращаем список для отображения
+from cachetools import TTLCache
+
+from starlette.responses import HTMLResponse
 
 
 
+router = APIRouter(
+    prefix='/screener',
+    tags=['Фронтэнд']
+)
 
-# # # @router.get("") 
-# # # async def get_levels(session: AsyncSession = Depends(get_async_session)): 
-# # #     query = select(Levels) 
-# # #     result = await session.execute(query) 
-# # #     levels = result.scalars().all()  # Получаем результаты в виде списка объектов Levels 
-# # #     return levels  # Возвращаем список для отображения
+
+templates = Jinja2Templates(directory='app/templates')
 
 
 
 
 
-# # # @router.get("") 
-# # # async def get_levels(): 
-# # #     async with async_session_maker() as session:  # Используем ее с контекстным менеджером 
-# # #         query = select(Levels) 
-# # #         result = await session.execute(query) 
-# # #         print(result)
-# #         # levels = result.scalars().all()  # Извлекаем все результаты 
-# #         # return levels  # Возвращаем полученные данные
-              
+@router.get('/impulses', name='impulses')
+async def get_impulses(
+    request: Request, 
+):
+    for_templates=await main_func()
 
-# # # @router.get("") 
-# # # async def get_levels():
-# # #     async with get_async_session() as session:
-# # #         query = select(Levels)
-# # #         result = await session.execute(query)
-# # #         print(result)
+    print(for_templates)
+
+    return templates.TemplateResponse(
+        name='screener.html', 
+        context={'request':request,
+                'for_templates': for_templates,
+                },
+        )
 
 
 
-# # # @router.get("") 
-# # # async def get_levels(session: AsyncSession = Depends(get_async_session)): 
-# # #     result = await session.execute(select(Levels)) 
-# # #     levels = result.scalars().all() 
-# # #     return levels
+
+@router.get("/positions", response_class=HTMLResponse, name='positions') 
+async def read_positions(request: Request): 
+    return templates.TemplateResponse(
+        "positions.html", {"request": request}
+        )
+
+currency_list = get_all_currency()
+
+
+cache = TTLCache(maxsize=100, ttl=600) 
+
+@router.get('/coin_info/{symbol}/{tf}', response_class=HTMLResponse) 
+async def get_coin_info(request: Request, symbol: str, tf: int): 
+    # Генерируем уникальный ключ для кэша 
+    cache_key = f"{symbol}_{tf}" 
+
+
+
+    if cache_key in cache:
+        print('беру из кэша')
+        html_content = cache[cache_key] 
+    else: 
+
+        
+        chart = get_currency_chart_with_impulse(symbol,tf, currency_list['Bybit']['Future'][symbol]['min_step'])
+
+        response = templates.TemplateResponse( 
+            name='coin_info.html', 
+            context={'request': request, 'chart' : chart}, 
+        ) 
+
+        html_content = response.body.decode() 
+
+        cache[cache_key] = html_content
+
+    return HTMLResponse(content=html_content)
