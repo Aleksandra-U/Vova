@@ -64,3 +64,4 @@ websockets==13.0.1
 sshtunnel
 cachetools
 plotly
+pandas

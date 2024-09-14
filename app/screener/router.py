@@ -56,18 +56,18 @@ currency_list = get_all_currency()
 cache = TTLCache(maxsize=100, ttl=600) 
 
 @router.get('/coin_info/{symbol}/{tf}', response_class=HTMLResponse) 
-async def get_coin_info(request: Request, symbol: str, tf: int): 
+async def get_coin_info(request: Request, symbol: str, tf: str):
+
+    tf = int(tf) 
     # Генерируем уникальный ключ для кэша 
     cache_key = f"{symbol}_{tf}" 
 
-
+    
 
     if cache_key in cache:
         print('беру из кэша')
         html_content = cache[cache_key] 
     else: 
-
-        
         chart = get_currency_chart_with_impulse(symbol,tf, currency_list['Bybit']['Future'][symbol]['min_step'])
 
         response = templates.TemplateResponse( 

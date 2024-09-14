@@ -13,10 +13,10 @@
     <title>Screener</title>  
     <style>
         .table-container { 
-            padding: 1cm; /* Отступы вокруг таблицы */ 
+            padding-top: 1cm; /* Отступы вокруг таблицы */ 
         }
         .navbar-container { 
-            margin: 1cm; /* Отступы для навигационного меню */ 
+            margin-bottom: 1cm; /* Отступы для навигационного меню */ 
         }
         table {  
             width: 100%;  
@@ -49,92 +49,66 @@
             event.target.classList.toggle('active-link'); 
         } 
     </script>
-</head>  
+</head>
 <body style="--tw-bg-opacity: 1; background-color: rgb(20 20 20 / var(--tw-bg-opacity));color:rgb(224, 224, 224);"> 
-    <div class="navbar-container"> 
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">    
-            <div class="container-fluid">    
-                <div class="collapse navbar-collapse" id="navbarNav">    
-                    <ul class="navbar-nav mx-auto">    
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('impulses') }}" onclick="highlightLink(event)"><h1>Impulses</h1></a>    
-                        </li>    
-                        <li class="nav-item">    
-                            <a class="nav-link" href="{{ url_for('positions') }}" onclick="highlightLink(event)"><h1>Positions</h1></a>    
-                        </li>    
-                    </ul>    
+    <div class="container">
+        <div class="navbar-container"> 
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">    
+                <div class="container-fluid">    
+                    <div class="collapse navbar-collapse" id="navbarNav">    
+                        <ul class="navbar-nav mx-auto">    
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('impulses') }}" onclick="highlightLink(event)"><h1>Impulses</h1></a>    
+                            </li>    
+                            <li class="nav-item">    
+                                <a class="nav-link" href="{{ url_for('positions') }}" onclick="highlightLink(event)"><h1>Positions</h1></a>    
+                            </li>    
+                        </ul>    
+                    </div>    
                 </div>    
-            </div>    
-        </nav> 
-    </div>
-    
-    <div class="table-container">  
-        <h1 class="text-center">Bybit Futures</h1>  
-        <table class="table table-dark table-bordered"> 
-            <thead> 
-                <tr>  
-                    <th style="width:10%">Symbol</th>  
-                    <th colspan="3">5 min</th>  
-                    <th colspan="3">15 min</th>  
-                    <th colspan="3">30 min</th>  
-                    <th colspan="3">60 min</th>  
-                </tr>  
-                <tr>  
-                    <th></th>  
-                    <th>Have Impulse</th>  
-                    <th>Have Levels</th>  
-                    <th>Have Order</th>  
-                    <th>Have Impulse</th>  
-                    <th>Have Levels</th>  
-                    <th>Have Order</th>  
-                    <th>Have Impulse</th>  
-                    <th>Have Levels</th>  
-                    <th>Have Order</th>  
-                    <th>Have Impulse</th>  
-                    <th>Have Levels</th>  
-                    <th>Have Order</th>  
-                </tr>  
-            </thead>  
-            <tbody>  
-                {% for symbol, data in for_templates.items() %} 
-                <tr>  
-                    <td>{{ symbol }}</td>  
-
-                    <td class="{% if data['5'][3] == 'L' %} bg-success {% elif data['5'][3] == 'S' %} bg-danger {% endif %}">
-                        {% if data['5'][0] == 'График' %}
-                                <a href="{{ url_for('get_coin_info', symbol=symbol, tf=5) }}" style="color: white;">График</a>
-                        {% endif %}
-                    </td>   
-                    <td> {{ data['5'][1] }} </td>  
-                    <td> {{ data['5'][2] }} </td> 
-
-                    <td class="{% if data['15'][3] == 'L' %} bg-success {% elif data['15'][3] == 'S' %} bg-danger {% endif %}">
-                        {% if data['15'][0] == 'График' %}
-                                <a href="{{ url_for('get_coin_info', symbol=symbol, tf=15) }}" style="color: white;">График</a>
-                        {% endif %}
-                    </td>   
-                    <td> {{ data['15'][1] }} </td>  
-                    <td> {{ data['15'][2] }} </td> 
-
-                    <td class="{% if data['30'][3] == 'L' %} bg-success {% elif data['30'][3] == 'S' %} bg-danger {% endif %}">
-                        {% if data['30'][0] == 'График' %}
-                                <a href="{{ url_for('get_coin_info', symbol=symbol, tf=30) }}" style="color: white;">График</a>
-                        {% endif %}
-                    </td>   
-                    <td> {{ data['30'][1] }} </td>  
-                    <td> {{ data['30'][2] }} </td>  
-                    
-                    <td class="{% if data['60'][3] == 'L' %} bg-success {% elif data['60'][3] == 'S' %} bg-danger {% endif %}">
-                        {% if data['60'][0] == 'График' %}
-                                <a href="{{ url_for('get_coin_info', symbol=symbol, tf=60) }}" style="color: white;">График</a>
-                        {% endif %}
-                    </td> 
-                    <td> {{ data['60'][1] }} </td>  
-                    <td> {{ data['60'][2] }} </td> 
-                </tr> 
-                {% endfor %}  
-            </tbody>  
-        </table>  
-    </div>  
+            </nav> 
+        </div>
+        
+        <div class="table-container">  
+            <h1 class="text-center">Bybit Futures</h1>  
+            <table class="table table-dark table-bordered"> 
+                <thead> 
+                    <tr>  
+                        <th style="width:10%">Symbol</th>  
+                        <th colspan="3">30 min</th>  
+                        <th colspan="3">60 min</th>  
+                    </tr>  
+                    <tr>  
+                        <th></th>  
+                        <th>Have Impulse</th>  
+                        <th>Have Levels</th>  
+                        <th>Have Order</th>  
+                        <th>Have Impulse</th>  
+                        <th>Have Levels</th>  
+                        <th>Have Order</th>  
+                    </tr>  
+                </thead>  
+                <tbody>  
+                    {% for symbol, data in for_templates.items() %} 
+                    <tr>  
+                        <td>{{ symbol }}</td>
+                        {% for i in ['30','60'] %}
+                            <td class="{% if data[i][3] == 'L' %} bg-success {% elif data[i][3] == 'S' %} bg-danger {% endif %}">
+                                {% if data[i][0] == 'График' %}
+                                        <a href="{{ url_for('get_coin_info', symbol=symbol, tf=i) }}" style="color: white;">График</a>
+                                {% endif %}
+                            </td>   
+                            <td class="{% if data[i][3] == 'L' and data[i][1] != 0 %} bg-success {% elif data[i][3] == 'S' and data[i][1] != 0  %} bg-danger {% endif %}"> {% if data[i][1] != 0 %}
+                                {{ data[i][1] }}
+                            {% endif %} </td>  
+                            <td class="{% if data[i][3] == 'L' and data[i][2] != 0  %} bg-success {% elif data[i][3] == 'S' and data[i][2] != 0 %} bg-danger {% endif %}"> {% if data[i][2] != 0 %} {{ data[i][2] }} {% endif %} </td> 
+                        {% endfor %}
+                        
+                    </tr> 
+                    {% endfor %}  
+                </tbody>  
+            </table>  
+        </div>  
+    </div>    
 </body>  
 </html>

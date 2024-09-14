@@ -8,6 +8,7 @@ from app.database import get_candles_by_symbol_tf, get_impulse_opened, get_level
 def get_df_from_candles(candles):
     df = pd.DataFrame(candles, columns=['id','symbol','tf','Open','High','Low','Close','Volume','Date'])
     df = df.drop(['id','symbol','tf'],axis=1)
+    #df['Date'] = df['Date'].apply(lambda x: datetime.fromtimestamp(int(str(x)[0:10])))
     df = df.sort_values(by=['Date'])
     return df
 
@@ -29,6 +30,7 @@ def get_chart_with_impulse(df, impulse,levels,orders_future,orders_spot, tf, sym
     impulse_end = impulse[7]
     impulse_time = (impulse_end - impulse_start).total_seconds() / 60
     df = df[df['Date'] > impulse_start - timedelta(minutes=impulse_time * 2)]
+
     fig = go.Figure(data=[go.Candlestick(x=df['Date'],
                                          open=df['Open'], high=df['High'],
                                          low=df['Low'], close=df['Close'])])
