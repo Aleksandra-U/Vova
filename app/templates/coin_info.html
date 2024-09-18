@@ -10,12 +10,15 @@
       integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" 
       crossorigin="anonymous" 
     /> 
-    <title>Название вкладки</title>  
+    <title>Impulse Chart</title>  
     
 </head>  
-<body > 
-    <div class='row' style='height:800px;'>
-        {{ chart | safe }}
+<body style="--tw-bg-opacity: 1; background-color: rgb(20 20 20 / var(--tw-bg-opacity));color:rgb(224, 224, 224);">
+    <div class="container"> 
+        <h1 class="text-center">{{symbol}}</h1>  
+        <div class='row' style='height:800px;'>
+            {{ chart | safe }}
+        </div>
     </div>
 </body>  
 </html>

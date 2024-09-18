@@ -22,7 +22,23 @@
         } 
         .nav-link:hover {  
             color: blue; /* Цвет при наведении */ 
-        }  
+        }
+        .name_param {
+            text-align:center;
+            font-weight: bold; /* Жирный шрифт для заголовков */
+        }
+
+        .name_param_h {
+            text-align:center;
+        }
+        .position-card {
+            border: 1px solid #ccc; /* Цвет и тип линии */
+            border-radius: 8px; /* Скругление углов */
+            padding: 15px; /* Отступы внутри блока */
+            margin-bottom: 20px; /* Расстояние между блоками */
+            background-color: rgb(20 20 20 / var(--tw-bg-opacity))
+        }
+    
     </style>  
     <script> 
         function highlightLink(event) { 
@@ -31,21 +47,75 @@
     </script>
 </head>   
 <body style="--tw-bg-opacity: 1; background-color: rgb(20 20 20 / var(--tw-bg-opacity));color:rgb(224, 224, 224);">  
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">   
-        <div class="container-fluid">   
-            <div class="collapse navbar-collapse" id="navbarNav">   
-                <ul class="navbar-nav mx-auto">   
-                    <li class="nav-item">   
-                        <a class="nav-link" href="{{ url_for('impulses') }}" onclick="highlightLink(event)"><h1>Impulses</h1></a>   
-                    </li>   
-                    <li class="nav-item">   
-                        <a class="nav-link" href="{{ url_for('positions') }}" onclick="highlightLink(event)"><h1>Positions</h1></a>   
-                    </li>   
-                </ul>   
-            </div>   
-        </div>   
-    </nav>  
-    <div>    
-        <h1 class="text-center">Positions Page</h1>    
-        <p class="text-center">This page is currently empty.</p>  
+    <div class="container">
+        <div class="navbar-container" style='padding-bottom:30px;'> 
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">    
+                <div class="container-fluid">    
+                    <div class="collapse navbar-collapse" id="navbarNav">    
+                        <ul class="navbar-nav mx-auto">    
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('impulses') }}" onclick="highlightLink(event)"><h1>Impulses</h1></a>    
+                            </li>    
+                            <li class="nav-item">    
+                                <a class="nav-link" href="{{ url_for('positions') }}" onclick="highlightLink(event)"><h1>Positions</h1></a>    
+                            </li>    
+                        </ul>    
+                    </div>    
+                </div>    
+            </nav> 
+        </div>
+        <div>
+            {% for pos in positions %}
+                <div class='position-card'> <!-- Добавляем класс к основному div -->
+                    <div class='row'>
+                        <div class='col-3'>
+                            <div class='row'>
+                                <h3 class='name_param_h'>Symbol</h3>
+                                <p class='name_param'> {{ pos.symbol }}</p>
+                            </div>
+                            <div class='row'>
+                                <h3 class='name_param_h'>Direction</h3>
+                                <p class='name_param'> {{ pos.side }} </p>
+                            </div>
+                        </div>
+                        <div class='col-3'>
+                            <div class='row'>
+                                <h3 class='name_param_h'>Price Open</h3>
+                                <p class='name_param'> {{ pos.price_open }}</p>
+                            </div>
+                            <div class='row'>
+                                <h3 class='name_param_h'>Date Open</h3>
+                                <p class='name_param'> {{ pos.date_open }} </p>
+                            </div>
+                        </div>
+                        <div class='col-3'>
+                            <div class='row'>
+                                <h3 class='name_param_h'>Stop</h3>
+                                <p class='name_param'> {{ pos.stop }}</p>
+                            </div>
+                            <div class='row'>
+                                <h3 class='name_param_h'>Tp</h3>
+                                <p class='name_param'> {{ pos.tp }} </p>
+                            </div>
+                        </div>
+                        <div class='col-3'>
+                            <div class='row'>
+                                <h3 class='name_param_h'>Quantity</h3>
+                                <p class='name_param'> {{ pos.quantity }}</p>
+                            </div>
+                            <div class='row'>
+                                <h3 class='name_param_h'>Curr Profit</h3>
+                                <p class='name_param'> 0 </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='row' style='height:800px;'>
+                        {{ pos.chart | safe }}
+                    </div>
+                </div>
+            {% endfor %}
+            
+        </div>
     </div>
+</body>  
+</html>

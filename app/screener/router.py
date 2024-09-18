@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Request, Depends
+from datetime import timedelta
 
-from app.database import main_func, get_all_currency
+from app.database import main_func, get_all_currency, get_all_positions
 from app.charts import get_currency_chart_with_impulse
 
 from fastapi_cache.decorator import cache
@@ -46,11 +47,20 @@ async def get_impulses(
 
 @router.get("/positions", response_class=HTMLResponse, name='positions') 
 async def read_positions(request: Request): 
+
+    currency_list = await get_all_currency()
+    positions = await get_all_positions()
+
+    for position in positions:
+        position.date_open = position.date_open.strftime('%Y-%m-%d %H:%M:%S')
+        chart = await get_currency_chart_with_impulse(position.symbol,60, currency_list['Bybit']['Future'][position.symbol]['min_step'], position)
+        position.chart = chart  # Добавляем новое поле со значением 5
+
     return templates.TemplateResponse(
-        "positions.html", {"request": request}
+        "positions.html", {"request": request, 'positions': positions}
         )
 
-currency_list = get_all_currency()
+
 
 
 cache = TTLCache(maxsize=100, ttl=600) 
@@ -68,11 +78,12 @@ async def get_coin_info(request: Request, symbol: str, tf: str):
         print('беру из кэша')
         html_content = cache[cache_key] 
     else: 
-        chart = get_currency_chart_with_impulse(symbol,tf, currency_list['Bybit']['Future'][symbol]['min_step'])
+        currency_list = await get_all_currency()
+        chart = await get_currency_chart_with_impulse(symbol,tf, currency_list['Bybit']['Future'][symbol]['min_step'])
 
         response = templates.TemplateResponse( 
             name='coin_info.html', 
-            context={'request': request, 'chart' : chart}, 
+            context={'request': request, 'chart' : chart, 'symbol' : symbol}, 
         ) 
 
         html_content = response.body.decode() 
